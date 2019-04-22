@@ -21,6 +21,7 @@ public class SessionGetService extends RESTServiceImpl {
 
   @Override
   public MaybeSource<Event> process(Maybe<Event> pEvent) {
+    
     return pEvent
             .doOnSuccess((e) -> {
               e.getResponse()

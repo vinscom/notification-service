@@ -1,4 +1,4 @@
-package in.erail.notification.aws;
+package in.erail.notification.aws.model;
 
 import in.erail.notification.ServiceType;
 import java.io.Serializable;
@@ -24,10 +24,10 @@ public class Endpoint implements Serializable {
   private static final long serialVersionUID = 1L;
   
   @Id 
-  @Column(name = "user_id")
+  @Column(name = "user_id", length = 36)
   private String user;
   
-  @Id 
+  @Id
   private String token;
   
   private String endpoint;

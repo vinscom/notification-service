@@ -2,8 +2,8 @@ package in.erail.notification.aws;
 
 import in.erail.notification.PushNotificationService;
 import in.erail.notification.ServiceType;
-import in.erail.persistence.EntityManagerHelper;
 import io.vertx.core.json.JsonObject;
+import javax.persistence.EntityManagerHelper;
 
 /**
  *
@@ -15,7 +15,6 @@ public class AWSPushNotificationService implements PushNotificationService {
   
   @Override
   public void add(String pUser, String pToken, ServiceType pType) {
-    
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

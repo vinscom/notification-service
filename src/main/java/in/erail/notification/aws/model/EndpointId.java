@@ -1,4 +1,4 @@
-package in.erail.notification.aws;
+package in.erail.notification.aws.model;
 
 import java.io.Serializable;
 

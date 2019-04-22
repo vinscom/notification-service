@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="in.erail_notification-service_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="erail_notification" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <validation-mode>NONE</validation-mode>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/curol_db?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="curol"/>
+      <property name="javax.persistence.jdbc.url" value="${db.notification.url}"/>
+      <property name="javax.persistence.jdbc.user" value="${db.notification.username}"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="India@123"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.jdbc.password" value="${db.notification.password}"/>
+      <property name="javax.persistence.schema-generation.database.action" value="${db.notification.database.action}"/>
+      <property name="hibernate.jdbc.time_zone" value="UTC"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.hikari.minimumIdle" value="5"/>
+      <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+      <property name="hibernate.hikari.idleTimeout" value="740000"/>
+      <property name="hibernate.hikari.maxLifetime" value="1740000"/>
+      <property name="hibernate.hikari.leakDetectionThreshold" value="60000"/>
+      <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+      <property name="hibernate.cache.use_second_level_cache" value="true"/>
+      <property name="hibernate.cache.use_query_cache" value="true"/>
+      <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jcache.JCacheRegionFactory"/>
+      <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
     </properties>
   </persistence-unit>
 </persistence>

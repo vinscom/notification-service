@@ -11,7 +11,7 @@
       <property name="javax.persistence.jdbc.password" value="${db.notification.password}"/>
       <property name="javax.persistence.schema-generation.database.action" value="${db.notification.database.action}"/>
       <property name="hibernate.jdbc.time_zone" value="UTC"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+      <property name="hibernate.dialect" value="MySQL57InnoDB"/>
       <property name="hibernate.show_sql" value="false"/>
       <property name="hibernate.hikari.minimumIdle" value="5"/>
       <property name="hibernate.hikari.maximumPoolSize" value="20"/>

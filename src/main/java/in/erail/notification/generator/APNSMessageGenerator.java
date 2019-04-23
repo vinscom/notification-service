@@ -14,7 +14,14 @@ public class APNSMessageGenerator implements ServiceMessageGenerator<Card> {
   @Override
   public JsonObject create(Card pCard) {
     DefaultCard card = (DefaultCard) pCard;
-    return JsonObject.mapFrom(card);
+    APNSMessage.Alert alert = new APNSMessage.Alert();
+    alert.setTitle(card.getTitle());
+    alert.setBody(card.getBody());
+    APNSMessage.Aps aps = new APNSMessage.Aps();
+    aps.setAlert(alert);
+    APNSMessage msg = new APNSMessage();
+    msg.setAps(aps);
+    return JsonObject.mapFrom(msg);
   }
 
 }

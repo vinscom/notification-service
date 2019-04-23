@@ -1,9 +1,12 @@
 package in.erail.notification.generator;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  *
  * @author vinay
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class APNSMessage {
 
   private Aps aps;
@@ -25,6 +28,7 @@ public class APNSMessage {
     this.notId = pNotId;
   }
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   public static class Alert {
 
     private String title;
@@ -57,6 +61,7 @@ public class APNSMessage {
 
   }
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   public static class Aps {
 
     private Alert alert;

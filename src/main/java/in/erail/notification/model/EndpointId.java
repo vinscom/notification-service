@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 public class EndpointId implements Serializable {
 
+  private static final long serialVersionUID = 1L;
   private String user;
   private String token;
 
@@ -23,7 +24,7 @@ public class EndpointId implements Serializable {
     this.user = pEndpoint.getUser();
     this.token = pEndpoint.getToken();
   }
-  
+
   public String getUser() {
     return user;
   }

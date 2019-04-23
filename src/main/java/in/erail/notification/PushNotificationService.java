@@ -1,6 +1,7 @@
 package in.erail.notification;
 
 import in.erail.notification.model.Endpoint;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -9,5 +10,7 @@ import io.reactivex.Single;
  */
 public interface PushNotificationService {
 
-  Single<Endpoint> add(Endpoint pEndpoint);
+  Single<Endpoint> addDevice(Endpoint pEndpoint);
+  Completable removeDevice(Endpoint pEndpoint);
+  
 }

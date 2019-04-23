@@ -1,6 +1,7 @@
 package in.erail.notification.model;
 
 import in.erail.notification.ServiceType;
+import io.vertx.core.json.JsonObject;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -100,6 +101,11 @@ public class Endpoint implements Serializable {
   public Endpoint setDeleted(boolean pDeleted) {
     this.deleted = pDeleted;
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return JsonObject.mapFrom(this).toString();
   }
 
 }

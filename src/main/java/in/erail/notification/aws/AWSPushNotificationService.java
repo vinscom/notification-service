@@ -5,14 +5,16 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointRequest;
+import com.amazonaws.services.sns.model.DeleteEndpointRequest;
 import com.amazonaws.services.sns.model.InvalidParameterException;
-import in.erail.glue.annotation.StartService;
+import com.google.common.base.Preconditions;
 import in.erail.notification.DefaultPushNotificationService;
+import in.erail.notification.ServiceType;
 import in.erail.notification.model.Endpoint;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -24,47 +26,20 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
   private Regions mRegion = Regions.EU_WEST_1;
   private String mAPNSPlatformApplicationARN;
   private String mFCMPlatformApplicationARN;
-  private boolean mEnable;
-  private Logger mLog;
-
-  @StartService
-  public void start() {
-    if (mSNSClient == null && isEnable()) {
-      mSNSClient = AmazonSNSClientBuilder
-              .standard()
-              .withRegion(getRegion())
-              .withCredentials(new DefaultAWSCredentialsProviderChain())
-              .build();
-    }
-  }
 
   @Override
-  public Single<Endpoint> add(Endpoint pEndpoint) {
-
-    if(!isEnable()){
-      return add(pEndpoint);
-    }
-    
+  public Single<Endpoint> addDevice(Endpoint pEndpoint) {
     Single<Endpoint> addEndpoint
             = createEndpoint(pEndpoint)
                     .map(e -> pEndpoint.setEndpoint(e))
-                    .flatMap(ep -> super.add(ep));
+                    .flatMap(ep -> super.addDevice(ep));
 
     return checkEndpointExists(pEndpoint).switchIfEmpty(addEndpoint);
   }
 
   protected Single<String> createEndpoint(Endpoint pEndpoint) {
 
-    String applicationArn = null;
-
-    switch (pEndpoint.getType()) {
-      case APNS:
-        applicationArn = getAPNSPlatformApplicationARN();
-        break;
-      case FCM:
-        applicationArn = getFCMPlatformApplicationARN();
-        break;
-    }
+    String applicationArn = getPlatformApplicationEndpoint(pEndpoint.getType());
 
     CreatePlatformEndpointRequest cpeReq
             = new CreatePlatformEndpointRequest()
@@ -96,6 +71,29 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
             });
   }
 
+  @Override
+  public Completable removeDevice(Endpoint pEndpoint) {
+
+    Preconditions.checkNotNull(pEndpoint.getEndpoint());
+
+    DeleteEndpointRequest req = new DeleteEndpointRequest().withEndpointArn(pEndpoint.getEndpoint());
+
+    return Single
+            .fromCallable(() -> getSNSClient().deleteEndpoint(req))
+            .flatMapCompletable(r -> super.removeDevice(pEndpoint));
+  }
+
+  protected String getPlatformApplicationEndpoint(ServiceType pType) {
+    switch (pType) {
+      case APNS:
+        return getAPNSPlatformApplicationARN();
+      case FCM:
+        return getFCMPlatformApplicationARN();
+      default:
+        return "";
+    }
+  }
+
   public String getAPNSPlatformApplicationARN() {
     return mAPNSPlatformApplicationARN;
   }
@@ -113,6 +111,13 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
   }
 
   public AmazonSNS getSNSClient() {
+    if (mSNSClient == null) {
+      mSNSClient = AmazonSNSClientBuilder
+              .standard()
+              .withRegion(getRegion())
+              .withCredentials(new DefaultAWSCredentialsProviderChain())
+              .build();
+    }
     return mSNSClient;
   }
 
@@ -126,22 +131,6 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
 
   public void setRegion(Regions pRegion) {
     this.mRegion = pRegion;
-  }
-
-  public Logger getLog() {
-    return mLog;
-  }
-
-  public void setLog(Logger pLog) {
-    this.mLog = pLog;
-  }
-
-  public boolean isEnable() {
-    return mEnable;
-  }
-
-  public void setEnable(boolean pEnable) {
-    this.mEnable = pEnable;
   }
 
 }

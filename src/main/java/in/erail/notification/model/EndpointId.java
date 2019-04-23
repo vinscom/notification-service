@@ -1,4 +1,4 @@
-package in.erail.notification.aws.model;
+package in.erail.notification.model;
 
 import java.io.Serializable;
 
@@ -11,6 +11,19 @@ public class EndpointId implements Serializable {
   private String user;
   private String token;
 
+  public EndpointId() {
+  }
+
+  public EndpointId(String pUser, String pToken) {
+    this.user = pUser;
+    this.token = pToken;
+  }
+
+  public EndpointId(Endpoint pEndpoint) {
+    this.user = pEndpoint.getUser();
+    this.token = pEndpoint.getToken();
+  }
+  
   public String getUser() {
     return user;
   }

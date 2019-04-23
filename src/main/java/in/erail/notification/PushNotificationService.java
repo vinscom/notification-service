@@ -1,6 +1,7 @@
 package in.erail.notification;
 
-import io.vertx.core.json.JsonObject;
+import in.erail.notification.model.Endpoint;
+import io.reactivex.Single;
 
 /**
  *
@@ -8,9 +9,5 @@ import io.vertx.core.json.JsonObject;
  */
 public interface PushNotificationService {
 
-  void send(String pUser, JsonObject pMessage);
-
-  void add(String pUser, String pToken, ServiceType pType);
-
-  void remove(String pUser, String pToken);
+  Single<Endpoint> add(Endpoint pEndpoint);
 }

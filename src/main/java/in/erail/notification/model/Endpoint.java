@@ -1,4 +1,4 @@
-package in.erail.notification.aws.model;
+package in.erail.notification.model;
 
 import in.erail.notification.ServiceType;
 import java.io.Serializable;
@@ -22,70 +22,84 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Endpoint implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  
-  @Id 
+
+  @Id
   @Column(name = "user_id", length = 36)
   private String user;
-  
+
   @Id
   private String token;
-  
+
   private String endpoint;
   private ServiceType type;
-  
+
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdOn;
-  
+
   private boolean deleted;
+
+  public Endpoint() {
+  }
+
+  public Endpoint(String pUser, String pToken) {
+    this.user = pUser;
+    this.token = pToken;
+  }
 
   public String getUser() {
     return user;
   }
 
-  public void setUser(String pUser) {
+  public Endpoint setUser(String pUser) {
     this.user = pUser;
+    return this;
   }
 
   public String getToken() {
     return token;
   }
 
-  public void setToken(String pToken) {
+  public Endpoint setToken(String pToken) {
     this.token = pToken;
+    return this;
   }
 
   public String getEndpoint() {
     return endpoint;
   }
 
-  public void setEndpoint(String pEndpoint) {
+  public Endpoint setEndpoint(String pEndpoint) {
     this.endpoint = pEndpoint;
+    return this;
   }
 
   public ServiceType getType() {
     return type;
   }
 
-  public void setType(ServiceType pType) {
+  public Endpoint setType(ServiceType pType) {
     this.type = pType;
+    return this;
   }
 
   public Date getCreatedOn() {
     return createdOn;
   }
 
-  public void setCreatedOn(Date pCreatedOn) {
+  public Endpoint setCreatedOn(Date pCreatedOn) {
     this.createdOn = pCreatedOn;
+    return this;
   }
 
   public boolean isDeleted() {
     return deleted;
   }
 
-  public void setDeleted(boolean pDeleted) {
+  public Endpoint setDeleted(boolean pDeleted) {
     this.deleted = pDeleted;
+    return this;
   }
 
 }

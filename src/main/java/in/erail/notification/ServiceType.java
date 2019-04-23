@@ -6,5 +6,5 @@ package in.erail.notification;
  */
 public enum ServiceType {
   APNS,
-  FMC
+  FCM
 }

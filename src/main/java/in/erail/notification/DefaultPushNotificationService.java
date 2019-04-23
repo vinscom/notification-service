@@ -1,8 +1,6 @@
 package in.erail.notification;
 
 import in.erail.glue.component.ServiceMap;
-import in.erail.notification.Card;
-import in.erail.notification.PushNotificationService;
 import in.erail.notification.model.Endpoint;
 import in.erail.notification.model.EndpointId;
 import io.reactivex.Completable;
@@ -65,10 +63,8 @@ public class DefaultPushNotificationService implements PushNotificationService {
     return checkEndPointExists(pEndpoint, pEM)
             .doOnSuccess(item -> getLog().debug(() -> "Removing Device:" + item.toString()))
             .doOnComplete(() -> getLog().warn(() -> "Device could not be removed as it is not registered:" + pEndpoint.toString()))
-            .flatMapCompletable((item) -> {
-              pEM.remove(item);
-              return Completable.complete();
-            });
+            .doOnSuccess(item -> pEM.remove(item))
+            .ignoreElement();
   }
 
   protected Observable<Endpoint> findDevices(String pUser) {
@@ -84,7 +80,7 @@ public class DefaultPushNotificationService implements PushNotificationService {
   }
 
   @Override
-  public Observable<String> send(String pUser, Card pCard) {
+  public Observable<String> publish(String pUser, Card pCard) {
     getLog().error("Message is not sent anywhere:" + pUser);
     return Observable.empty();
   }

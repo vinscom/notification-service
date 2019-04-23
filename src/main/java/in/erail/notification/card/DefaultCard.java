@@ -15,16 +15,18 @@ public class DefaultCard implements Card {
     return mTitle;
   }
 
-  public void setTitle(String pTitle) {
+  public DefaultCard setTitle(String pTitle) {
     this.mTitle = pTitle;
+    return this;
   }
 
   public String getBody() {
     return mBody;
   }
 
-  public void setBody(String pBody) {
+  public DefaultCard setBody(String pBody) {
     this.mBody = pBody;
+    return this;
   }
 
 }

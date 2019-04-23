@@ -81,13 +81,20 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
   @Override
   public Completable removeDevice(Endpoint pEndpoint) {
 
-    Preconditions.checkNotNull(pEndpoint.getEndpoint());
+    Preconditions.checkNotNull(pEndpoint.getUser());
+    Preconditions.checkNotNull(pEndpoint.getToken());
 
-    DeleteEndpointRequest req = new DeleteEndpointRequest().withEndpointArn(pEndpoint.getEndpoint());
-
-    return Single
-            .fromCallable(() -> getSNSClient().deleteEndpoint(req))
-            .flatMapCompletable(r -> super.removeDevice(pEndpoint));
+    return getEntityManagerHelper()
+            .getEMTx()
+            .flatMapCompletable((em) -> {
+              return checkEndPointExists(pEndpoint, em)
+                      .flatMapSingle((ep) -> {
+                        DeleteEndpointRequest req = new DeleteEndpointRequest().withEndpointArn(ep.getEndpoint());
+                        return Single.fromCallable(() -> getSNSClient().deleteEndpoint(req));
+                      })
+                      .flatMapCompletable(r -> super.removeDevice(pEndpoint, em))
+                      .doOnComplete(() -> em.getTransaction().commit());
+            });
   }
 
   protected String getPlatformApplicationEndpoint(ServiceType pType) {
@@ -102,7 +109,8 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public Observable<String> send(String pUser, Card pCard) {
+  @Override
+  public Observable<String> publish(String pUser, Card pCard) {
     return findDevices(pUser)
             .flatMapMaybe((ep) -> {
               getLog().debug(() -> "Endpoint:" + ep.toString());

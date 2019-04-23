@@ -15,5 +15,5 @@ public interface PushNotificationService {
 
   Completable removeDevice(Endpoint pEndpoint);
 
-  Observable<String> send(String pUser, Card pCard);
+  Observable<String> publish(String pUser, Card pCard);
 }

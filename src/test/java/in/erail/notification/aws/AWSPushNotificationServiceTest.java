@@ -30,10 +30,11 @@ import static org.mockito.Mockito.*;
 public class AWSPushNotificationServiceTest {
 
   private final AWSPushNotificationService service = Glue.instance().resolve("/in/erail/notification/PushNotificationService");
-  private final EntityManagerHelper emh = Glue.instance().resolve("/javax/persistence/EntityManagerHelper");
   private final AmazonSNS client = service.getSNSClient();
+  private final EntityManagerHelper emh = Glue.instance().resolve("/javax/persistence/EntityManagerHelper");
 
   public AWSPushNotificationServiceTest() {
+    reset(client);
     when(client.createPlatformEndpoint(any())).thenReturn(new CreatePlatformEndpointResult().withEndpointArn("EndpointArn"));
     when(client.deleteEndpoint(any())).thenReturn(new DeleteEndpointResult());
     when(client.publish(any())).thenReturn(new PublishResult().withMessageId("MSGID"));
@@ -56,7 +57,7 @@ public class AWSPushNotificationServiceTest {
   public void removeDeviceTest(VertxTestContext testContext) {
     Endpoint ep = new Endpoint().setUser("endpoint2").setToken("token2").setType(ServiceType.APNS);
     service.addDevice(ep).blockingGet();
-    Endpoint ep2 = new Endpoint().setUser("endpoint2").setToken("token2").setType(ServiceType.APNS).setEndpoint("EndpointArn");
+    Endpoint ep2 = new Endpoint().setUser("endpoint2").setToken("token2");
     service.removeDevice(ep2).blockingAwait();
     emh
             .getEM()
@@ -75,7 +76,7 @@ public class AWSPushNotificationServiceTest {
     card.setTitle("Title");
 
     service
-            .send("endpoint3", card)
+            .publish("endpoint3", card)
             .toList()
             .doOnSuccess(l -> assertEquals(2, l.size()))
             .subscribe((l) -> testContext.completeNow(), err -> testContext.failNow(err));

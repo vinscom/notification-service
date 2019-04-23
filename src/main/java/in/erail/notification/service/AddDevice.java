@@ -1,5 +1,6 @@
 package in.erail.notification.service;
 
+import com.google.common.net.MediaType;
 import in.erail.model.Event;
 import in.erail.notification.PushNotificationService;
 import in.erail.notification.model.Endpoint;
@@ -22,9 +23,15 @@ public class AddDevice extends RESTServiceImpl {
   }
 
   protected Maybe<Event> addDevice(Event pEvent) {
-    Endpoint ep = new JsonObject(pEvent.getRequest().bodyAsString()).mapTo(Endpoint.class);
-    getPushNotificationService().addDevice(ep);
-    return Maybe.just(pEvent);
+    Endpoint endpoint = new JsonObject(pEvent.getRequest().bodyAsString()).mapTo(Endpoint.class);
+    return getPushNotificationService()
+            .addDevice(endpoint)
+            .doOnSuccess(ep -> {
+              pEvent.getResponse().setBody(new JsonObject().put("id", ep.getEndpoint()).toBuffer().getBytes());
+              pEvent.getResponse().setMediaType(MediaType.JSON_UTF_8);
+            })
+            .map(ep -> pEvent)
+            .toMaybe();
   }
 
   public PushNotificationService getPushNotificationService() {

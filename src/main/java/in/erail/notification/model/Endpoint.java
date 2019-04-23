@@ -1,5 +1,6 @@
 package in.erail.notification.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import in.erail.notification.ServiceType;
 import io.vertx.core.json.JsonObject;
 import java.io.Serializable;
@@ -25,6 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
   @NamedQuery(name = "findUserDevices", query = "SELECT e FROM Endpoint e WHERE e.user = :userid")
 })
 @Table(name = "erail_notif_endpoint")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Endpoint implements Serializable {
 
   public static final String QUERY_FIND_USER_DEVICES = "findUserDevices";

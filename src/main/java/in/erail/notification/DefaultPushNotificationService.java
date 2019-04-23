@@ -1,4 +1,4 @@
-package in.erail.notification.service;
+package in.erail.notification;
 
 import in.erail.glue.component.ServiceMap;
 import in.erail.notification.Card;

@@ -1,5 +1,6 @@
-package in.erail.notification.service;
+package in.erail.notification.aws;
 
+import in.erail.notification.DefaultPushNotificationService;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNS;

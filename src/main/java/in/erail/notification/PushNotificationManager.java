@@ -1,7 +1,6 @@
 package in.erail.notification;
 
 import in.erail.glue.annotation.StartService;
-import in.erail.glue.component.ServiceMap;
 
 /**
  *
@@ -9,7 +8,6 @@ import in.erail.glue.component.ServiceMap;
  */
 public class PushNotificationManager {
 
-  private ServiceMap mServiceMessageGenerator;
   private PushNotificationService mPushNotificationService;
 
   @StartService
@@ -18,14 +16,6 @@ public class PushNotificationManager {
 
   public void send(String pUser, String pToken, Card pCard) {
     
-  }
-
-  public ServiceMap getServiceMessageGenerator() {
-    return mServiceMessageGenerator;
-  }
-
-  public void setServiceMessageGenerator(ServiceMap pServiceMessageGenerator) {
-    this.mServiceMessageGenerator = pServiceMessageGenerator;
   }
 
   public PushNotificationService getPushNotificationService() {

@@ -7,12 +7,19 @@ import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointRequest;
 import com.amazonaws.services.sns.model.DeleteEndpointRequest;
 import com.amazonaws.services.sns.model.InvalidParameterException;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.google.common.base.Preconditions;
+import in.erail.notification.Card;
 import in.erail.notification.DefaultPushNotificationService;
+import in.erail.notification.ServiceMessageGenerator;
 import in.erail.notification.ServiceType;
 import in.erail.notification.model.Endpoint;
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.vertx.core.json.JsonObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -92,6 +99,30 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
       default:
         return "";
     }
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public Observable<String> send(String pUser, Card pCard) {
+    return findDevices(pUser)
+            .flatMapMaybe((ep) -> {
+              getLog().debug(() -> "Endpoint:" + ep.toString());
+              ServiceMessageGenerator smg = (ServiceMessageGenerator) getServiceMessageGenerator().get(ep.getType().name());
+              JsonObject msg = smg.create(pCard);
+              PublishRequest req = new PublishRequest()
+                      .withTargetArn(ep.getEndpoint())
+                      .withMessage(msg.toString())
+                      .withMessageStructure("json");
+              getLog().debug(() -> "Sending Push Message:" + req.toString());
+              try {
+                PublishResult res = getSNSClient().publish(req);
+                getLog().debug(() -> "Result Push Message:" + res.toString());
+                return Maybe.just(res.getMessageId() + ":" + ep.getEndpoint());
+              } catch (Exception ex) {
+                getLog().error(() -> ex);
+              }
+              return Maybe.empty();
+            })
+            .doOnNext(id -> getLog().debug("Message ID:" + id));
   }
 
   public String getAPNSPlatformApplicationARN() {

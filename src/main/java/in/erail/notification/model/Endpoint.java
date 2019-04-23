@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,8 +21,14 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @IdClass(EndpointId.class)
+@NamedQueries({
+  @NamedQuery(name = "findUserDevices", query = "SELECT e FROM Endpoint e WHERE e.user = :userid")
+})
 @Table(name = "erail_notif_endpoint")
 public class Endpoint implements Serializable {
+
+  public static final String QUERY_FIND_USER_DEVICES = "findUserDevices";
+  public static final String QUERY_FIND_USER_DEVICES_PARAM_USERID = "userid";
 
   private static final long serialVersionUID = 1L;
 

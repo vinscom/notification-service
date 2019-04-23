@@ -1,4 +1,4 @@
-package in.erail.notification.apns;
+package in.erail.notification.generator;
 
 /**
  *

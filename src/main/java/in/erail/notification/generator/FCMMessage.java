@@ -1,4 +1,4 @@
-package in.erail.notification.fcm;
+package in.erail.notification.generator;
 
 /**
  *

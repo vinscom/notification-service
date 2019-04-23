@@ -3,16 +3,16 @@ package in.erail.notification.aws;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointResult;
 import com.amazonaws.services.sns.model.DeleteEndpointResult;
+import com.amazonaws.services.sns.model.PublishResult;
 import in.erail.glue.Glue;
 import in.erail.notification.ServiceType;
+import in.erail.notification.card.DefaultCard;
 import in.erail.notification.model.Endpoint;
 import static org.junit.jupiter.api.Assertions.*;
 
 import in.erail.notification.model.EndpointId;
-import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +36,7 @@ public class AWSPushNotificationServiceTest {
   public AWSPushNotificationServiceTest() {
     when(client.createPlatformEndpoint(any())).thenReturn(new CreatePlatformEndpointResult().withEndpointArn("EndpointArn"));
     when(client.deleteEndpoint(any())).thenReturn(new DeleteEndpointResult());
+    when(client.publish(any())).thenReturn(new PublishResult().withMessageId("MSGID"));
   }
 
   @Test
@@ -63,4 +64,21 @@ public class AWSPushNotificationServiceTest {
             .subscribe(t -> testContext.completeNow(), err -> testContext.failNow(err));
   }
 
+  @Test
+  @Order(3)
+  public void sendTest(VertxTestContext testContext) {
+    service.addDevice(new Endpoint().setUser("endpoint3").setToken("token3").setType(ServiceType.APNS)).blockingGet();
+    service.addDevice(new Endpoint().setUser("endpoint3").setToken("token4").setType(ServiceType.APNS)).blockingGet();
+
+    DefaultCard card = new DefaultCard();
+    card.setBody("Body");
+    card.setTitle("Title");
+
+    service
+            .send("endpoint3", card)
+            .toList()
+            .doOnSuccess(l -> assertEquals(2, l.size()))
+            .subscribe((l) -> testContext.completeNow(), err -> testContext.failNow(err));
+
+  }
 }

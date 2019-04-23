@@ -1,48 +1,136 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "tutorial-api",
-        "version": "1.0.0"
-    },
-    "paths": {
-        "/session": {
-            "get": {
-                "summary": "Get all session messages",
-                "description": "Return all session messages",
-                "operationId": "API_SESSION_GET",
-                "responses": {
-                    "200": {
-                        "description": "Return all messages",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/message"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+  "openapi" : "3.0.2",
+  "info" : {
+    "title" : "Notification Service",
+    "version" : "1.0.0"
+  },
+  "paths" : {
+    "/notification/device" : {
+      "post" : {
+        "summary" : "Create Endpoint",
+        "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Endpoint"
+              }
             }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
         }
+      }
     },
-    "components": {
-        "schemas": {
-            "message": {
-                "title": "Root Type for message",
-                "description": "The root of the message type's schema.",
-                "type": "object",
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    },
-                    "time": {
-                        "type": "string"
-                    }
-                }
-            }
+    "/notification/device/{user}/{token}" : {
+      "delete" : {
+        "summary" : "Delete device token",
+        "operationId" : "ERAIL_NOTIFICATION_DELETE_DEVICE",
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
         }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Unique token specific to device",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/publish/{user}/{group}" : {
+      "post" : {
+        "summary" : "Send message to target devices",
+        "operationId" : "ERAIL_NOTIFICATION_PUBLISH",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Card"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "group",
+        "in" : "path",
+        "description" : "Target device group",
+        "required" : true,
+        "schema" : {
+          "enum" : [ "push", "email", "sms" ]
+        }
+      } ]
     }
+  },
+  "components" : {
+    "schemas" : {
+      "Endpoint" : {
+        "title" : "Root Type for Endpoint",
+        "description" : "Endpoint representing device",
+        "required" : [ "type" ],
+        "type" : "object",
+        "properties" : {
+          "user" : {
+            "type" : "string"
+          },
+          "token" : {
+            "description" : "Token given by external service",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "Type of token",
+            "enum" : [ "APNS", "FCM" ]
+          }
+        },
+        "example" : "{\n    \"user\" : \"userid\",\n    \"token\" : \"token\",\n    \"type\" : \"APNS\"\n}"
+      },
+      "Card" : {
+        "title" : "Root Type for card",
+        "description" : "The root of the card type's schema.",
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "description" : "Title text",
+            "type" : "string"
+          },
+          "body" : {
+            "description" : "Body text",
+            "type" : "string"
+          }
+        },
+        "example" : "{\n    \"title\" : \"Title\",\n    \"body\" : \"Body Content\"\n}"
+      }
+    }
+  }
 }

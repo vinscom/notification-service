@@ -1,4 +1,4 @@
-package in.erail.notification.aws;
+package in.erail.notification.service;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
@@ -11,7 +11,6 @@ import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
 import com.google.common.base.Preconditions;
 import in.erail.notification.Card;
-import in.erail.notification.DefaultPushNotificationService;
 import in.erail.notification.ServiceMessageGenerator;
 import in.erail.notification.ServiceType;
 import in.erail.notification.model.Endpoint;

@@ -1,5 +1,6 @@
 package in.erail.notification.aws;
 
+import in.erail.notification.service.AWSPushNotificationService;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreatePlatformEndpointResult;
 import com.amazonaws.services.sns.model.DeleteEndpointResult;

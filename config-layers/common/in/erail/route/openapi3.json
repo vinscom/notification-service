@@ -7,6 +7,7 @@
   "paths" : {
     "/notification/device" : {
       "post" : {
+        "tags" : [ "Notification" ],
         "summary" : "Create Endpoint",
         "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
         "requestBody" : {
@@ -28,6 +29,7 @@
     },
     "/notification/device/{user}/{token}" : {
       "delete" : {
+        "tags" : [ "Notification" ],
         "summary" : "Delete device token",
         "operationId" : "ERAIL_NOTIFICATION_DELETE_DEVICE",
         "responses" : {
@@ -56,6 +58,7 @@
     },
     "/notification/publish/{user}/{group}" : {
       "post" : {
+        "tags" : [ "Notification" ],
         "summary" : "Send message to target devices",
         "operationId" : "ERAIL_NOTIFICATION_PUBLISH",
         "requestBody" : {
@@ -91,6 +94,130 @@
           "enum" : [ "push", "email", "sms" ]
         }
       } ]
+    },
+    "/notification/aws/createendpoint/{token}" : {
+      "post" : {
+        "tags" : [ "AWS" ],
+        "summary" : "Created Endpoint Hook",
+        "operationId" : "ERAIL_NOTIFICATION_AWS_CREATE_ENDPOINT",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "token to make this url unique",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/aws/deleteendpoint/{token}" : {
+      "post" : {
+        "tags" : [ "AWS" ],
+        "summary" : "Delete Endpoint Hook",
+        "operationId" : "ERAIL_NOTIFICATION_AWS_DELETE_ENDPOINT",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "token to make this url unique",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/aws/deliveryfailure/{token}" : {
+      "post" : {
+        "tags" : [ "AWS" ],
+        "summary" : "Delivery Failure Hook",
+        "operationId" : "ERAIL_NOTIFICATION_AWS_DELIVERY_FAILED",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "token to make this url unique",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/aws/updateendpoint/{token}" : {
+      "post" : {
+        "tags" : [ "AWS" ],
+        "summary" : "Update Endpoint Hook",
+        "operationId" : "ERAIL_NOTIFICATION_AWS_UPDATE_ENDPOINT",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "token to make this url unique",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
     }
   },
   "components" : {
@@ -110,7 +237,7 @@
           },
           "type" : {
             "description" : "Type of token",
-            "enum" : [ "APNS", "FCM" ]
+            "enum" : [ "APNS", "FCM", "APNS_SANDBOX" ]
           }
         },
         "example" : "{\n    \"user\" : \"userid\",\n    \"token\" : \"token\",\n    \"type\" : \"APNS\"\n}"

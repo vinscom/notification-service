@@ -27,74 +27,6 @@
         }
       }
     },
-    "/notification/device/{user}/{token}" : {
-      "delete" : {
-        "tags" : [ "Notification" ],
-        "summary" : "Delete device token",
-        "operationId" : "ERAIL_NOTIFICATION_DELETE_DEVICE",
-        "responses" : {
-          "200" : {
-            "description" : "Success"
-          }
-        }
-      },
-      "parameters" : [ {
-        "name" : "user",
-        "in" : "path",
-        "description" : "User Id",
-        "required" : true,
-        "schema" : {
-          "type" : "string"
-        }
-      }, {
-        "name" : "token",
-        "in" : "path",
-        "description" : "Unique token specific to device",
-        "required" : true,
-        "schema" : {
-          "type" : "string"
-        }
-      } ]
-    },
-    "/notification/publish/{user}/{group}" : {
-      "post" : {
-        "tags" : [ "Notification" ],
-        "summary" : "Send message to target devices",
-        "operationId" : "ERAIL_NOTIFICATION_PUBLISH",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Card"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Success"
-          }
-        }
-      },
-      "parameters" : [ {
-        "name" : "user",
-        "in" : "path",
-        "description" : "User Id",
-        "required" : true,
-        "schema" : {
-          "type" : "string"
-        }
-      }, {
-        "name" : "group",
-        "in" : "path",
-        "description" : "Target device group",
-        "required" : true,
-        "schema" : {
-          "enum" : [ "push", "email", "sms" ]
-        }
-      } ]
-    },
     "/notification/aws/createendpoint/{token}" : {
       "post" : {
         "tags" : [ "AWS" ],
@@ -213,6 +145,58 @@
         "name" : "token",
         "in" : "path",
         "description" : "token to make this url unique",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/device/{token}" : {
+      "delete" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Delete device token",
+        "operationId" : "ERAIL_NOTIFICATION_DELETE_DEVICE",
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/publish/{group}" : {
+      "post" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Send message to target devices",
+        "operationId" : "ERAIL_NOTIFICATION_PUBLISH",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Card"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "group",
+        "in" : "path",
+        "description" : "User Id",
         "required" : true,
         "schema" : {
           "type" : "string"

@@ -6,3 +6,4 @@
 nb-configuration.xml
 .idea
 /config-layers/local/in/erail/notification/PushNotificationService.properties
+nbactions.xml

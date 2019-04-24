@@ -46,6 +46,8 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
   protected Single<String> createEndpoint(Endpoint pEndpoint) {
 
     String applicationArn = getPlatformApplicationARN().get(pEndpoint.getType().name());
+    
+    Preconditions.checkNotNull(applicationArn);
 
     CreatePlatformEndpointRequest cpeReq
             = new CreatePlatformEndpointRequest()
@@ -53,6 +55,8 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
                     .withToken(pEndpoint.getToken())
                     .withCustomUserData(pEndpoint.getUser());
 
+    getLog().debug(() -> cpeReq.toString());
+    
     return Single
             .fromCallable(() -> getSNSClient().createPlatformEndpoint(cpeReq))
             .map(res -> res.getEndpointArn())

@@ -24,7 +24,7 @@ public class PublishMessage extends RESTServiceImpl {
 
   protected Maybe<Event> publishMessage(Event pEvent) {
     String user = pEvent.getRequest().getPathParameters().get("user");
-    String group = pEvent.getRequest().getPathParameters().get("group");
+    //String group = pEvent.getRequest().getPathParameters().get("group");
 
     DefaultCard card = new JsonObject(pEvent.getRequest().bodyAsString()).mapTo(DefaultCard.class);
 

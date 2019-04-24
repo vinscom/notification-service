@@ -13,13 +13,13 @@ import com.amazonaws.services.sns.model.PublishResult;
 import com.google.common.base.Preconditions;
 import in.erail.notification.Card;
 import in.erail.notification.ServiceMessageGenerator;
-import in.erail.notification.ServiceType;
 import in.erail.notification.model.Endpoint;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.core.json.JsonObject;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +31,7 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
 
   private AmazonSNS mSNSClient;
   private Regions mRegion = Regions.EU_WEST_1;
-  private String mAPNSPlatformApplicationARN;
-  private String mFCMPlatformApplicationARN;
+  private Map<String, String> mPlatformApplicationARN;
 
   @Override
   public Single<Endpoint> addDevice(Endpoint pEndpoint) {
@@ -46,7 +45,7 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
 
   protected Single<String> createEndpoint(Endpoint pEndpoint) {
 
-    String applicationArn = getPlatformApplicationEndpoint(pEndpoint.getType());
+    String applicationArn = getPlatformApplicationARN().get(pEndpoint.getType().name());
 
     CreatePlatformEndpointRequest cpeReq
             = new CreatePlatformEndpointRequest()
@@ -97,17 +96,6 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
             });
   }
 
-  protected String getPlatformApplicationEndpoint(ServiceType pType) {
-    switch (pType) {
-      case APNS:
-        return getAPNSPlatformApplicationARN();
-      case FCM:
-        return getFCMPlatformApplicationARN();
-      default:
-        return "";
-    }
-  }
-
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   public Observable<String> publish(String pUser, Card pCard) {
@@ -115,7 +103,8 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
             .flatMapMaybe((ep) -> {
               getLog().debug(() -> "Endpoint:" + ep.toString());
               ServiceMessageGenerator smg = (ServiceMessageGenerator) getServiceMessageGenerator().get(ep.getType().name());
-              JsonObject msg = smg.create(pCard);
+              JsonObject card = smg.create(pCard);
+              JsonObject msg = new JsonObject().put(ep.getType().name(), card).put("default", "Default Text");
               PublishRequest req = new PublishRequest()
                       .withTargetArn(ep.getEndpoint())
                       .withMessage(msg.toString())
@@ -131,22 +120,6 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
               return Maybe.empty();
             })
             .doOnNext(id -> getLog().debug("Message ID:" + id));
-  }
-
-  public String getAPNSPlatformApplicationARN() {
-    return mAPNSPlatformApplicationARN;
-  }
-
-  public void setAPNSPlatformApplicationARN(String pAPNSPlatformApplicationARN) {
-    this.mAPNSPlatformApplicationARN = pAPNSPlatformApplicationARN;
-  }
-
-  public String getFCMPlatformApplicationARN() {
-    return mFCMPlatformApplicationARN;
-  }
-
-  public void setFCMPlatformApplicationARN(String pFCMPlatformApplicationARN) {
-    this.mFCMPlatformApplicationARN = pFCMPlatformApplicationARN;
   }
 
   public AmazonSNS getSNSClient() {
@@ -170,6 +143,14 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
 
   public void setRegion(Regions pRegion) {
     this.mRegion = pRegion;
+  }
+
+  public Map<String, String> getPlatformApplicationARN() {
+    return mPlatformApplicationARN;
+  }
+
+  public void setPlatformApplicationARN(Map<String, String> pPlatformApplicationARN) {
+    this.mPlatformApplicationARN = pPlatformApplicationARN;
   }
 
 }

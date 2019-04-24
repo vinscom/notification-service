@@ -6,5 +6,6 @@ package in.erail.notification;
  */
 public enum ServiceType {
   APNS,
+  APNS_SANDBOX,
   FCM
 }

@@ -215,6 +215,8 @@
                         <configuration>
                             <executable>java</executable>
                             <arguments>
+                                <argument>-Daws.accessKeyId=${aws.access.key.id}</argument>
+                                <argument>-Daws.secretKey=${aws.secret.key}</argument>
                                 <argument>-Dglue.layers=${layer.api.framework},${layer.notification},${layer.notification.local}</argument>
                                 <argument>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory</argument>
                                 <argument>-classpath</argument>

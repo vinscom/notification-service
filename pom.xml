@@ -13,6 +13,10 @@
         <api.framework.version>2.4.8</api.framework.version>
         <vertx.version>3.7.0</vertx.version>
         <aws.sdk.version>1.11.471</aws.sdk.version>
+        <layer.api.framework>${settings.localRepository}/in/erail/api-framework/${api.framework.version}/api-framework-${api.framework.version}-common-config.zip</layer.api.framework>
+        <layer.notification>${project.basedir}/config-layers/common</layer.notification>
+        <layer.notification.local>${project.basedir}/config-layers/local</layer.notification.local>
+        <layer.notification.test>${project.basedir}/config-layers/test</layer.notification.test>
     </properties>
     <dependencies>
         <dependency>
@@ -176,4 +180,51 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>liquibase</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <configuration>
+                            <changeLogFile>src/main/resources/sql/mysql/changelog.xml</changeLogFile>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <url>${liquibase.db.notification.url}</url>
+                            <username>${db.notification.username}</username>
+                            <password>${db.notification.password}</password>
+                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Dglue.layers=${layer.api.framework},${layer.notification},${layer.notification.local}</argument>
+                                <argument>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory</argument>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>in.erail.glue.Boot</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

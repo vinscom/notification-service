@@ -110,7 +110,7 @@
           },
           "type" : {
             "description" : "Type of token",
-            "enum" : [ "APNS", "FCM" ]
+            "enum" : [ "APNS", "FCM", "APNS_SANDBOX" ]
           }
         },
         "example" : "{\n    \"user\" : \"userid\",\n    \"token\" : \"token\",\n    \"type\" : \"APNS\"\n}"

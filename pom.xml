@@ -15,8 +15,11 @@
         <aws.sdk.version>1.11.471</aws.sdk.version>
         <layer.api.framework>${settings.localRepository}/in/erail/api-framework/${api.framework.version}/api-framework-${api.framework.version}-common-config.zip</layer.api.framework>
         <layer.notification>${project.basedir}/config-layers/common</layer.notification>
-        <layer.notification.local>${project.basedir}/config-layers/local</layer.notification.local>
+        <layer.notification.local>${project.basedir}/config-layers/env/local</layer.notification.local>
         <layer.notification.test>${project.basedir}/config-layers/test</layer.notification.test>
+        <glue.config.test.layer>./lib/api-framework-${api.framework.version}-common-config.zip,./lib/${project.build.finalName}-common-config.zip,./lib/${project.build.finalName}-env-test-config.zip</glue.config.test.layer>
+        <glue.config.prod.layer>./lib/api-framework-${api.framework.version}-common-config.zip,./lib/${project.build.finalName}-common-config.zip,./lib/${project.build.finalName}-env-prod-config.zip</glue.config.prod.layer>
+        <db.notification.database.action>none</db.notification.database.action>
     </properties>
     <dependencies>
         <dependency>
@@ -136,7 +139,31 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>lambda-deployment</id>
+                        <id>env-test-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/env-test-config.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>env-prod-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/env-prod-config.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>deployment</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -144,7 +171,7 @@
                         <configuration>
                             <finalName>notification-service</finalName>
                             <descriptors>
-                                <descriptor>src/assembly/lambda-deployment.xml</descriptor>
+                                <descriptor>src/assembly/deployment.xml</descriptor>
                             </descriptors>
                             <attach>false</attach>
                         </configuration>

@@ -48,13 +48,13 @@ public class PublishMessageTest {
 
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
 
-    Endpoint ep = new Endpoint("testuser3", "testtoken3").setType(ServiceType.APNS);
+    Endpoint ep = new Endpoint().setType(ServiceType.APNS).setToken("testtoken3");
 
     DefaultCard card = new DefaultCard().setBody("card-body").setTitle("card-title");
     
     WebClient
             .create(server.getVertx())
-            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device")
+            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device/testuser3")
             .rxSendJsonObject(JsonObject.mapFrom(ep))
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))
             .doOnSuccess((t) -> {

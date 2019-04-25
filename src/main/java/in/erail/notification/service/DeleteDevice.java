@@ -1,5 +1,6 @@
 package in.erail.notification.service;
 
+import in.erail.auth.OAuth2Utils;
 import in.erail.model.Event;
 import in.erail.notification.PushNotificationService;
 import in.erail.notification.model.Endpoint;
@@ -22,7 +23,10 @@ public class DeleteDevice extends RESTServiceImpl {
 
   protected Maybe<Event> deleteDevice(Event pEvent) {
 
-    String user = pEvent.getRequest().getPathParameters().get("user");
+    String user = OAuth2Utils
+            .getUserIdFromRequest(pEvent.getRequest())
+            .orElse(pEvent.getRequest().getPathParameters().get("user"));
+
     String token = pEvent.getRequest().getPathParameters().get("token");
 
     Endpoint ep = new Endpoint(user, token);

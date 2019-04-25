@@ -54,7 +54,7 @@ public class PublishMessageTest {
     
     WebClient
             .create(server.getVertx())
-            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device/testuser3")
+            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser3")
             .rxSendJsonObject(JsonObject.mapFrom(ep))
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))
             .doOnSuccess((t) -> {
@@ -64,7 +64,7 @@ public class PublishMessageTest {
             .flatMap((res) -> {
               return WebClient
                       .create(server.getVertx())
-                      .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/publish/testuser3/push")
+                      .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/publish/testuser3/push")
                       .rxSendJsonObject(JsonObject.mapFrom(card));
             })
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))

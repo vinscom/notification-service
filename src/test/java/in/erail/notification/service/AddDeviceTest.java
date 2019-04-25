@@ -49,7 +49,7 @@ public class AddDeviceTest {
 
     WebClient
             .create(server.getVertx())
-            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device/testuser1")
+            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser1")
             .rxSendJsonObject(JsonObject.mapFrom(ep))
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))
             .doOnSuccess((t) -> {

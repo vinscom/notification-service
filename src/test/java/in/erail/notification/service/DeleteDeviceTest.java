@@ -50,7 +50,7 @@ public class DeleteDeviceTest {
 
     WebClient
             .create(server.getVertx())
-            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device/testuser2")
+            .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser2")
             .rxSendJsonObject(JsonObject.mapFrom(ep))
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))
             .doOnSuccess((t) -> {
@@ -60,7 +60,7 @@ public class DeleteDeviceTest {
             .flatMap((res) -> {
               return WebClient
                       .create(server.getVertx())
-                      .delete(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/notification/device/testuser2/testtoken2")
+                      .delete(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser2/testtoken2")
                       .rxSend();
             })
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))

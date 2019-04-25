@@ -1,6 +1,7 @@
 package in.erail.notification.service;
 
 import com.google.common.net.MediaType;
+import in.erail.auth.OAuth2Utils;
 
 import in.erail.model.Event;
 import in.erail.notification.PushNotificationService;
@@ -25,8 +26,10 @@ public class AddDevice extends RESTServiceImpl {
 
   protected Maybe<Event> addDevice(Event pEvent) {
 
-    String user = pEvent.getRequest().getPathParameters().get("user");
-
+    String user = OAuth2Utils
+            .getUserIdFromRequest(pEvent.getRequest())
+            .orElse(pEvent.getRequest().getPathParameters().get("user"));
+    
     Endpoint endpoint = new JsonObject(pEvent.getRequest().bodyAsString()).mapTo(Endpoint.class);
     endpoint.setUser(user);
 

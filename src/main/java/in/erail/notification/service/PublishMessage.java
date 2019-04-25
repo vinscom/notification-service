@@ -1,6 +1,7 @@
 package in.erail.notification.service;
 
 import com.google.common.base.Joiner;
+import in.erail.auth.OAuth2Utils;
 import in.erail.model.Event;
 import in.erail.notification.PushNotificationService;
 import in.erail.notification.card.DefaultCard;
@@ -23,9 +24,12 @@ public class PublishMessage extends RESTServiceImpl {
   }
 
   protected Maybe<Event> publishMessage(Event pEvent) {
-    String user = pEvent.getRequest().getPathParameters().get("user");
-    //String group = pEvent.getRequest().getPathParameters().get("group");
 
+    String user = OAuth2Utils
+            .getUserIdFromRequest(pEvent.getRequest())
+            .orElse(pEvent.getRequest().getPathParameters().get("user"));
+
+    //String group = pEvent.getRequest().getPathParameters().get("group");
     DefaultCard card = new JsonObject(pEvent.getRequest().bodyAsString()).mapTo(DefaultCard.class);
 
     return getPushNotificationService()

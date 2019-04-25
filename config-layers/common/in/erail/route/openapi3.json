@@ -5,28 +5,6 @@
     "version" : "1.0.0"
   },
   "paths" : {
-    "/notification/device" : {
-      "post" : {
-        "tags" : [ "Notification" ],
-        "summary" : "Create Endpoint",
-        "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Endpoint"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Success"
-          }
-        }
-      }
-    },
     "/notification/aws/createendpoint/{token}" : {
       "post" : {
         "tags" : [ "AWS" ],
@@ -151,7 +129,7 @@
         }
       } ]
     },
-    "/notification/device/{token}" : {
+    "/notification/device/{user}/{token}" : {
       "delete" : {
         "tags" : [ "Notification" ],
         "summary" : "Delete device token",
@@ -163,16 +141,24 @@
         }
       },
       "parameters" : [ {
-        "name" : "token",
+        "name" : "user",
         "in" : "path",
         "description" : "User Id",
         "required" : true,
         "schema" : {
           "type" : "string"
         }
+      }, {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Unique token",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
       } ]
     },
-    "/notification/publish/{group}" : {
+    "/notification/publish/{user}/{group}" : {
       "post" : {
         "tags" : [ "Notification" ],
         "summary" : "Send message to target devices",
@@ -194,9 +180,48 @@
         }
       },
       "parameters" : [ {
-        "name" : "group",
+        "name" : "user",
         "in" : "path",
         "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "group",
+        "in" : "path",
+        "description" : "Predefined groups",
+        "required" : true,
+        "schema" : {
+          "enum" : [ "push", "sms", "email" ]
+        }
+      } ]
+    },
+    "/notification/device/{user}" : {
+      "post" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Create Endpoint",
+        "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Endpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User id",
         "required" : true,
         "schema" : {
           "type" : "string"
@@ -212,9 +237,6 @@
         "required" : [ "type" ],
         "type" : "object",
         "properties" : {
-          "user" : {
-            "type" : "string"
-          },
           "token" : {
             "description" : "Token given by external service",
             "type" : "string"

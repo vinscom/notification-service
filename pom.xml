@@ -142,6 +142,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <finalName>notification-service</finalName>
                             <descriptors>
                                 <descriptor>src/assembly/lambda-deployment.xml</descriptor>
                             </descriptors>

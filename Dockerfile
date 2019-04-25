@@ -3,7 +3,7 @@ FROM openjdk:8-jdk
 VOLUME /tmp
 ENV VERTX_OPTS -Dvertx.cacheDirBase=/tmp/
 
-COPY target/notification-service-lambda-deployment /
+COPY target/notification-service-deployment /
 EXPOSE 8888
 
 #HEALTHCHECK --interval=5s \

@@ -5,6 +5,5 @@
 .settings
 nb-configuration.xml
 .idea
-/config-layers/env/local/in/erail/notification/PushNotificationService.properties
 nbactions.xml
 .factorypath

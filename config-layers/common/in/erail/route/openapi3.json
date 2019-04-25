@@ -129,6 +129,66 @@
         }
       } ]
     },
+    "/notification/internal/device/{user}" : {
+      "post" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Create Endpoint",
+        "operationId" : "ERAIL_NOTIFICATION_INTERNAL_ADD_DEVICE",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Endpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
+    "/notification/internal/device/{user}/{token}" : {
+      "delete" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Delete device token",
+        "operationId" : "ERAIL_NOTIFICATION_INTERNAL_DELETE_DEVICE",
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Unique token",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    },
     "/notification/device/{user}/{token}" : {
       "delete" : {
         "tags" : [ "Notification" ],
@@ -157,6 +217,67 @@
           "type" : "string"
         }
       } ]
+    },
+    "/notification/internal/publish/{user}/{group}" : {
+      "post" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Send message to target devices",
+        "operationId" : "ERAIL_NOTIFICATION_INTERNAL_PUBLISH",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Card"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "user",
+        "in" : "path",
+        "description" : "User Id",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      }, {
+        "name" : "group",
+        "in" : "path",
+        "description" : "Predefined groups",
+        "required" : true,
+        "schema" : {
+          "enum" : [ "push", "sms", "email" ]
+        }
+      } ]
+    },
+    "/notification/device" : {
+      "post" : {
+        "tags" : [ "Notification" ],
+        "summary" : "Create Endpoint",
+        "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Endpoint"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
     },
     "/notification/publish/{user}/{group}" : {
       "post" : {
@@ -194,37 +315,6 @@
         "required" : true,
         "schema" : {
           "enum" : [ "push", "sms", "email" ]
-        }
-      } ]
-    },
-    "/notification/device/{user}" : {
-      "post" : {
-        "tags" : [ "Notification" ],
-        "summary" : "Create Endpoint",
-        "operationId" : "ERAIL_NOTIFICATION_ADD_DEVICE",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Endpoint"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Success"
-          }
-        }
-      },
-      "parameters" : [ {
-        "name" : "user",
-        "in" : "path",
-        "description" : "User id",
-        "required" : true,
-        "schema" : {
-          "type" : "string"
         }
       } ]
     }

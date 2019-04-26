@@ -7,3 +7,5 @@ nb-configuration.xml
 .idea
 nbactions.xml
 .factorypath
+/.apt_generated/
+/.apt_generated_tests/

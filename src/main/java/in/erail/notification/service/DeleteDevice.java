@@ -7,6 +7,7 @@ import in.erail.notification.model.Endpoint;
 import in.erail.service.RESTServiceImpl;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
+import java.util.Base64;
 
 /**
  *
@@ -27,7 +28,7 @@ public class DeleteDevice extends RESTServiceImpl {
             .getUserIdFromRequest(pEvent.getRequest())
             .orElse(pEvent.getRequest().getPathParameters().get("user"));
 
-    String token = pEvent.getRequest().getPathParameters().get("token");
+    String token = new String(Base64.getDecoder().decode(pEvent.getRequest().getPathParameters().get("token")));
 
     Endpoint ep = new Endpoint(user, token);
 

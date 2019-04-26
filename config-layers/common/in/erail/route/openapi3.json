@@ -58,7 +58,7 @@
       }, {
         "name" : "token",
         "in" : "path",
-        "description" : "Unique token",
+        "description" : "Base 64 encoded unique token",
         "required" : true,
         "schema" : {
           "type" : "string"
@@ -233,7 +233,7 @@
       "parameters" : [ {
         "name" : "token",
         "in" : "path",
-        "description" : "User Id",
+        "description" : "Base64 encoded token",
         "required" : true,
         "schema" : {
           "type" : "string"
@@ -295,10 +295,10 @@
       "parameters" : [ {
         "name" : "group",
         "in" : "path",
-        "description" : "User Id",
+        "description" : "Group",
         "required" : true,
         "schema" : {
-          "type" : "string"
+          "enum" : [ "push", "email", "sms" ]
         }
       } ]
     }
@@ -320,7 +320,10 @@
             "enum" : [ "APNS", "FCM", "APNS_SANDBOX" ]
           }
         },
-        "example" : "{\n    \"user\" : \"userid\",\n    \"token\" : \"token\",\n    \"type\" : \"APNS\"\n}"
+        "example" : {
+          "token" : "some text",
+          "type" : { }
+        }
       },
       "Card" : {
         "title" : "Root Type for card",

@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <api.framework.version>2.4.8</api.framework.version>
+        <api.framework.version>2.4.9</api.framework.version>
         <vertx.version>3.7.0</vertx.version>
         <aws.sdk.version>1.11.471</aws.sdk.version>
         <layer.api.framework>${settings.localRepository}/in/erail/api-framework/${api.framework.version}/api-framework-${api.framework.version}-common-config.zip</layer.api.framework>
@@ -21,6 +21,13 @@
         <glue.config.prod.layer>./lib/api-framework-${api.framework.version}-common-config.zip,./lib/${project.build.finalName}-common-config.zip,./lib/${project.build.finalName}-env-prod-config.zip</glue.config.prod.layer>
         <db.notification.database.action>none</db.notification.database.action>
     </properties>
+    <repositories>
+        <repository>
+            <id>oss-sonatype-org</id>
+            <name>oss.sonatype.org</name>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>in.erail</groupId>

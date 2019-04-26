@@ -60,7 +60,7 @@ public class DeleteDeviceTest {
             .flatMap((res) -> {
               return WebClient
                       .create(server.getVertx())
-                      .delete(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser2/testtoken2")
+                      .delete(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/internal/notification/device/testuser2/dGVzdHRva2VuMg==")
                       .rxSend();
             })
             .doOnSuccess(response -> assertEquals(200, response.statusCode()))

@@ -11,6 +11,7 @@ public class DefaultCard implements Card {
   private String mTitle;
   private String mBody;
 
+  @Override
   public String getTitle() {
     return mTitle;
   }
@@ -20,6 +21,7 @@ public class DefaultCard implements Card {
     return this;
   }
 
+  @Override
   public String getBody() {
     return mBody;
   }

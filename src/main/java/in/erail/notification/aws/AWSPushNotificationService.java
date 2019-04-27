@@ -108,7 +108,7 @@ public class AWSPushNotificationService extends DefaultPushNotificationService {
               getLog().debug(() -> "Endpoint:" + ep.toString());
               ServiceMessageGenerator smg = (ServiceMessageGenerator) getServiceMessageGenerator().get(ep.getType().name());
               JsonObject card = smg.create(pCard);
-              JsonObject msg = new JsonObject().put(ep.getType().name(), card).put("default", "Default Text");
+              JsonObject msg = new JsonObject().put(ep.getType().name(), card).put("default", pCard.getTitle());
               PublishRequest req = new PublishRequest()
                       .withTargetArn(ep.getEndpoint())
                       .withMessage(msg.toString())

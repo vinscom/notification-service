@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM adoptopenjdk/openjdk12-openj9:alpine-jre
 
 VOLUME /tmp
 ENV VERTX_OPTS -Dvertx.cacheDirBase=/tmp/
